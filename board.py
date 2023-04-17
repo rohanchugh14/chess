@@ -1,9 +1,19 @@
 class Board:
-   # a class to represent a chess board
+   """
+   A class to represent a chess board
 
-   # constructor takes in a FEN string to create a new board, with the
-   # default being the starting position FEN string
-   # Learn more about FEN here: https://www.chess.com/terms/fen-chess
+   Constructor takes in a FEN string to create a new board, with the
+   default being the starting position FEN string
+   Learn more about FEN here: https://www.chess.com/terms/fen-chess
+
+   This class does not deal with any sort of logic other than parsing the 
+   positional part of a FEN string. It does not validate moves or even parse
+   algebraic notation, it solely has methods that allow indirect altering of
+   the board's representation, with moves represented as previous 2D List 
+   position, new 2D list position. These moves are parsed from algebraic 
+   notation and validated in the Chess class, and then converted to that
+   form and sent to this class to update the Board. 
+   """
    def __init__(self, fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'):
       """
       A constructor for a chess board that can take in a FEN string for a 

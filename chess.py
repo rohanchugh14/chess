@@ -22,6 +22,9 @@ class Chess:
    def __str__(self):
       return str(self.board)
    
+   def parse_move(self, move):
+      pass
+
    def make_move(self, move):
       """
       Makes the move on the board according to whose turn it currently is.
