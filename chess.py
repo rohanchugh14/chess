@@ -30,8 +30,8 @@ class Chess:
     @staticmethod
     def __convert_pos(pos):
         """
-        Takes a string position on the board e.g. "e4" and converts it to row,col
-        for use in the Board class.
+        Takes a string position on the board e.g. "e4" and converts it to 
+        row,col for use in the Board class.
         """
         row = pos[0] - 'a'
         col = pos[1] - 1
