@@ -15,7 +15,7 @@ class Board:
     form and sent to this class to update the Board. 
     """
 
-    def __init__(self, fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'):
+    def __init__(self, fen):
         """
         A constructor for a chess board that can take in a FEN string for a 
         starting position or use the default chess board to start. 

@@ -23,6 +23,7 @@ class Chess:
         if move[0].lower() == move[0]:
             # simple pawn move, only one possible choice:
             old_row, old_col = self.__convert_pos(move)
+            new_row
 
         pass
 
