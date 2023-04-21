@@ -18,6 +18,12 @@ class Chess:
     def __str__(self):
         return str(self.board)
 
+    def select_piece(self, piece):
+        """
+        Selects a piece on the board and returns a list of possible moves.
+        """
+        self.selected_piece = piece
+        
     def parse_move(self, move):
         # pawn move
         # if move[0].lower() == move[0]:

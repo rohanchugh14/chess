@@ -34,8 +34,19 @@ class Board:
                 else:
                     row.append(char)
             self.board.append(row)
-        self.pieces = Piece.init_pieces(self.board)
+        self.pieces, self.piece_board = Piece.init_pieces(self.board)
 
+    def get_piece_str(self, row, col):
+        """
+        Returns the piece at the given row and column of the board.
+        """
+        return self.board[row][col]
+
+    def get_piece(self, row, col):
+        """
+        Returns the piece at the given row and column of the board.
+        """
+        return self.piece_board[row][col]
     def __str__(self):
         """
         Returns the string representation of the chess board at it's current 

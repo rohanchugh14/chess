@@ -15,10 +15,12 @@ def main():
             y2 = y1 + 50
             fill = "white" if (i+j) % 2 == 0 else "black"
             canv.create_rectangle(x1, y1, x2, y2, fill=fill)
+    img = PhotoImage(file="../img/white_pawn.png")
+    itm = canv.create_image(100,100, image=img, anchor="nw")
+    canv.tag_bind(itm, "<Button-1>", lambda event: canv.move(itm, 50, 0))
     root.mainloop()
     board = Chess("r1bk3r/p2pBpNp/n4n2/1p1NP2P/6P1/3P4/P1P1K3/q5b1")
     print(board)
-
 
 if __name__ == '__main__':
     main()

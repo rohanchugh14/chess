@@ -1,4 +1,5 @@
-from PIL import Image
+# from PIL import Image
+from tkinter import PhotoImage
 import os
 
 class Piece:
@@ -7,8 +8,11 @@ class Piece:
     Inherited by each individual piece class to override methods like
     move and generate_moves()
     """
-    # class variable, images for all pieces, one dictionary for each color
+    # very weird tkinter bug where I must keep a reference to the images
+    # or else they will not show up due to garbage collection...    
+    # class variables, images for all pieces, one dictionary for each color
     images = []
+    DOT_IMAGE = None
 
     # parent class of all pieces
     def __init__(self, color, row, col):
@@ -16,33 +20,61 @@ class Piece:
         self.row = row
         self.col = col
 
+    # set image for piece
+    def set_img(self, img):
+        self.img = img
+    
+    # get image for piece
+    def get_img(self):
+        return self.img
+    # initialize self.pieces array for Board class
     @staticmethod
     def init_pieces(fen_board):
         # load images
         Piece.load_images()
         # initialize all pieces in an array from a FEN string conversion
         # of a board
+        piece_board = []
+        for i in range(8):
+            row = []
+            for j in range(8):
+                row.append(None)
+            piece_board.append(row)
+        
         pieces = []
         for row in range(len(fen_board)):
-            for col in range(len(row)):
+            for col in range(len(fen_board[0])):
                 square = fen_board[row][col]
                 color = 0 if square.isupper() else 1
                 square = square.lower()
                 if square != ' ':
                     # match statement only in python 3.10
                     if square == 'k':
-                        pieces.append(King(color, row, col))
+                        piece = King(color, row, col)
+                        pieces.append(piece)
+                        piece_board[row][col] = piece
                     elif square == 'q':
-                        pieces.append(Queen(color, row, col))
+                        piece = Queen(color, row, col)
+                        pieces.append(piece)
+                        piece_board[row][col] = piece
                     elif square == 'r':
-                        pieces.append(Rook(color, row, col))
+                        piece = Rook(color, row, col)
+                        pieces.append(piece)
+                        piece_board[row][col] = piece
                     elif square == 'b':
-                        pieces.append(Bishop(color, row, col))
+                        piece = Bishop(color, row, col)
+                        pieces.append(piece)
+                        piece_board[row][col] = piece
                     elif square == 'n':
-                        pieces.append(Knight(color, row, col))
+                        piece = Knight(color, row, col)
+                        pieces.append(piece)
+                        piece_board[row][col] = piece
                     elif square == 'p':
-                        pieces.append(Pawn(color, row, col))
-        return pieces
+                        piece = Pawn(color, row, col)
+                        pieces.append(piece)
+                        piece_board[row][col] = piece
+        return pieces, piece_board
+    # load images for each piece
     @staticmethod
     def load_images():
         # two dictionaries, one for each color
@@ -51,18 +83,18 @@ class Piece:
         images = []
         images.append({})
         images.append({})
-        for filename in os.listdir('../img'):
+        for filename in os.listdir('../img/pieces'):
             color, piece_name = filename[:-4].split('_')
-            img = Image.open(f'../img/{filename}')
-
+            img = PhotoImage(file=f'../img/pieces/{filename}')
+            piece_ltr = piece_name[0] if piece_name != 'knight' else 'n'
             if color == "white":
-                images[0][piece_name] = img
+                images[0][piece_ltr] = img
             else:
-                images[1][piece_name] = img
-
-
-        return images
-        # load images for each piece
+                images[1][piece_ltr] = img
+        
+        Piece.images = images
+        Piece.DOT_IMAGE = PhotoImage(file='../img/target.png')
+        
 
 class King(Piece):
     # king class
