@@ -1,3 +1,6 @@
+# testing file in /python
+python/test.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -20,10 +20,10 @@ class Chess:
 
     def parse_move(self, move):
         # pawn move
-        if move[0].lower() == move[0]:
-            # simple pawn move, only one possible choice:
-            new_row, new_col = self.__convert_pos(move)
-            old_row =  
+        # if move[0].lower() == move[0]:
+        #     # simple pawn move, only one possible choice:
+        #     new_row, new_col = self.__convert_pos(move)
+        #     old_row =  
 
         pass
 

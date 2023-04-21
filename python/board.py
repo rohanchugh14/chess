@@ -1,3 +1,4 @@
+from piece import Piece
 class Board:
     """
     A class to represent a chess board
@@ -33,6 +34,7 @@ class Board:
                 else:
                     row.append(char)
             self.board.append(row)
+        self.pieces = Piece.init_pieces(self.board)
 
     def __str__(self):
         """
