@@ -22,8 +22,8 @@ class Chess:
         # pawn move
         if move[0].lower() == move[0]:
             # simple pawn move, only one possible choice:
-            old_row, old_col = self.__convert_pos(move)
-            new_row
+            new_row, new_col = self.__convert_pos(move)
+            old_row =  
 
         pass
 
@@ -33,8 +33,8 @@ class Chess:
         Takes a string position on the board e.g. "e4" and converts it to 
         row,col for use in the Board class.
         """
-        row = pos[0] - 'a'
-        col = pos[1] - 1
+        col = pos[0] - 'a'
+        row = 8 - pos[1] - 1
         return row, col
 
     def make_move(self, move):
