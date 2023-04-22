@@ -7,13 +7,9 @@ class Board:
     default being the starting position FEN string
     Learn more about FEN here: https://www.chess.com/terms/fen-chess
 
-    This class does not deal with any sort of logic other than parsing the 
-    positional part of a FEN string. It does not validate moves or even parse
-    algebraic notation, it solely has methods that allow indirect altering of
-    the board's representation, with moves represented as previous 2D List 
-    position, new 2D list position. These moves are parsed from algebraic 
-    notation and validated in the Chess class, and then converted to that
-    form and sent to this class to update the Board. 
+    This class deals with the state of the game like the board, whose turn it
+    is, and check/checkmate status along with useful methods for finding moves.
+    The moves are validated in the Piece class. 
     """
 
     def __init__(self, fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'):
@@ -27,6 +23,7 @@ class Board:
         self.turn = 0
         self.in_check = False
         self.in_checkmate = False
+        
         fen = fen.split('/')
         for rank in fen:
             row = []
@@ -64,7 +61,6 @@ class Board:
                     if move.new_pos == (king.row, king.col):
                         return True
         return False
-        pass
 
     def is_in_checkmate(self, color):
         """
@@ -126,6 +122,7 @@ class Board:
         Returns the piece at the given row and column of the board.
         """
         return self.piece_board[row][col]
+    
     def __str__(self):
         """
         Returns the string representation of the chess board at it's current 

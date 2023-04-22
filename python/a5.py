@@ -73,11 +73,23 @@ was very difficult, and I went through a lot of struggle with how to represent
 it using python's OOP features.
 
 6. What features would you add next?
+
 The next features I would add are some things that would allow for more
 advanced chess, such as castling, en passant, pawn promotion, and
 all the obscure checks for stalemate (with some being 
 relatively simple like making the same moveset 3 times in a row) and the
-ability to choose what piece  you want to promote your pawn to. There would also
+ability to choose what piece  you want to promote your pawn to. I ran out of 
+time to implement those features, but it was mainly because I opted for a GUI
+approach to Chess instead of a text-based version, which took a lot of time
+but for a much cleaner and more user-friendly experience. It also has the 
+foundation for those features and they can be extended relatively easily. If I 
+had stuck with a text-based version, I would have definitely had the time to add
+those advanced features, but I really wouldn't have learned much about Python or
+utilized some of its best features, like Tkinter and OOP. I would have only 
+learned and used Python's basic syntax as it would have been the same in 
+every language
+
+There would also
 be a lot of very simple nice-to-have features like a timer for each player or
 more information on the UI like the number of pieces each player has taken and
 what the past moves were. I would also like to add a feature that allows you
@@ -86,7 +98,7 @@ initial state the board is loaded in by adding a parameter to the Board() call,
 but it only recreates the piece positions and not the logic like whose turn it 
 is or check/checkmate status, which FEN strings have support for. 
 """
-
+# main entry point
 def main():
     root = Tk()
     root.geometry("500x550")
@@ -108,12 +120,10 @@ def main():
                        reset(canv, txt, root))
     reset_btn.pack()
     board = Board()
-    # img = PhotoImage(file="../img/white_pawn.png")
-    # itm = canv.create_image(100,100, image=img, anchor="nw")
-    # canv.tag_bind(itm, "<Button-1>", lambda event: canv.move(itm, 50, 0))
     draw_pieces(canv, board, txt, root)
     root.mainloop()
 
+# draws blank board
 def draw_board(canv):
     for i in range(8):
         for j in range(8):
@@ -124,6 +134,7 @@ def draw_board(canv):
             fill = "white" if (i+j) % 2 == 0 else "black"
             canv.create_rectangle(x1, y1, x2, y2, fill=fill)
 
+# draws pieces on board
 def draw_pieces(canv, board, txt, root):
     for i in range(8):
         for j in range(8):
@@ -139,12 +150,7 @@ def draw_pieces(canv, board, txt, root):
                               piece=piece, canv=canv: \
                                 select_piece(board, piece, canv, txt, root))
                 
-                # canv.tag_bind(itm, "<Button-1>", lambda event, \
-                #               piece=piece: temp_move_piece(canv, piece))
-
-def temp_move_piece(canv, piece):
-    canv.move(piece.get_img(), 0, 50)
-
+# selects a piece and shows its legal moves
 def select_piece(board, piece, canv, txt, root):
     # return early if the wrong piece is trying to be selected
     if(piece.color != board.turn):
@@ -166,6 +172,7 @@ def select_piece(board, piece, canv, txt, root):
                         move=move, board=board, canv=canv: \
                             make_move(board, move, canv, txt, root))
 
+# makes a move and updates the board
 def make_move(board, move, canv, txt, root):
     # cool way to discard the return values of a function :)
     # returns the old row and col of the piece that was moved
@@ -199,6 +206,7 @@ def make_move(board, move, canv, txt, root):
     else:            
         txt.set("White's turn" if board.turn == 0 else "Black's turn")
 
+# resets the board
 def reset(canv, txt, root):
     # clear the canvas
     canv.delete("all")
@@ -211,7 +219,6 @@ def reset(canv, txt, root):
     txt.set("White's turn\nInstructions: Click on a piece to" + \
                 " select it and see its legal moves. Click on one of the" + \
                 " legal moves to make that move. ")
-    # board.update()
 
 if __name__ == '__main__':
     main()

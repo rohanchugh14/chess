@@ -34,8 +34,10 @@ class Piece:
         color = "White" if self.color == 0 else "Black"
         return f"{color} {self.__class__.__name__} at ({self.row}, {self.col})"
 
+    # debugging representation of piece
     def __repr__(self):
         return str(self)
+    
     # generate moves, overriden by each piece
     def generate_moves(self, board):
         pass
@@ -55,6 +57,7 @@ class Piece:
             board.undo_move(move, captured_piece, old_row, old_col)
         
         return updated_moves
+    
     # set image for piece
     def set_img(self, img):
         self.img = img
@@ -62,6 +65,7 @@ class Piece:
     # get image for piece
     def get_img(self):
         return self.img
+    
     # initialize self.pieces array for Board class
     @staticmethod
     def init_pieces(fen_board):
@@ -90,7 +94,6 @@ class Piece:
                         piece_board[row][col] = piece
                     elif square == 'q':
                         piece = Queen(color, row, col)
-                        # print(piece.generate_moves(fen_board))
                         pieces.append(piece)
                         piece_board[row][col] = piece
                     elif square == 'r':
@@ -110,6 +113,7 @@ class Piece:
                         pieces.append(piece)
                         piece_board[row][col] = piece
         return pieces, piece_board
+    
     # load images for each piece
     @staticmethod
     def load_images():
@@ -134,6 +138,8 @@ class Piece:
 
 class King(Piece):
     # king class
+
+    # initialize king
     def __init__(self, color, row, col):
         super().__init__(color, row, col)
         if color == 0:
@@ -165,6 +171,8 @@ class King(Piece):
 
 class Queen(Piece):
     # queen class
+
+    # initialize queen
     def __init__(self, color, row, col):
         super().__init__(color, row, col)
         if color == 0:
@@ -187,6 +195,8 @@ class Queen(Piece):
 
 class Rook(Piece):
     # rook class
+
+    # initialize rook
     def __init__(self, color, row, col):
         super().__init__(color, row, col)
     
@@ -215,6 +225,8 @@ class Rook(Piece):
 
 class Bishop(Piece):
     # bishop class
+
+    # initialize bishop
     def __init__(self, color, row, col):
         super().__init__(color, row, col)
 
@@ -243,6 +255,8 @@ class Bishop(Piece):
 
 class Knight(Piece):
     # knight class
+
+    # initialize knight
     def __init__(self, color, row, col):
         super().__init__(color, row, col)
 
@@ -268,6 +282,8 @@ class Knight(Piece):
 
 class Pawn(Piece):
     # pawn class
+
+    # initialize pawn
     def __init__(self, color, row, col):
         super().__init__(color, row, col)
     
