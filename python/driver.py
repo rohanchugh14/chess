@@ -13,7 +13,7 @@ def main():
     canv = Canvas(root, width = 401, height = 401, highlightthickness=0)
     canv.pack()
     draw_board(canv)
-    board = Board("8/8/8/8/4k3/5b2/6B1/7K")
+    board = Board()
     # img = PhotoImage(file="../img/white_pawn.png")
     # itm = canv.create_image(100,100, image=img, anchor="nw")
     # canv.tag_bind(itm, "<Button-1>", lambda event: canv.move(itm, 50, 0))
@@ -42,7 +42,8 @@ def draw_pieces(canv, board):
                 piece = board.get_piece(i, j)
                 piece.set_img(itm)
                 canv.tag_bind(itm, "<Button-1>", lambda event, \
-                              piece=piece, canv=canv: select_piece(board, piece, canv))
+                              piece=piece, canv=canv: \
+                                select_piece(board, piece, canv))
                 
                 # canv.tag_bind(itm, "<Button-1>", lambda event, \
                 #               piece=piece: temp_move_piece(canv, piece))
@@ -51,16 +52,42 @@ def temp_move_piece(canv, piece):
     canv.move(piece.get_img(), 0, 50)
 
 def select_piece(board, piece, canv):
+    # return early if the wrong piece is trying to be selected
+    if(piece.color != board.turn):
+        return
+    # if a piece is already selected, remove the shown moves
+    if(board.selected_piece != None):
+        for move in board.shown_moves:
+            canv.delete(move.img)
+    # select the piece and get the legal moves
     moves = board.select_piece(piece)
+    # draw the legal moves
     for i in range(len(moves)):
         move = moves[i]
         itm = canv.create_image(move.new_pos[1] * 50, move.new_pos[0] * 50, \
                                 image=Piece.DOT_IMAGE, anchor="nw")
-    # itm = canv.create_image(piece.col * 50, piece.row * 50, \
-    #                         image=Piece.DOT_IMAGE, anchor="nw")
-    # canv.tag_raise(itm)
-    canv.tag_bind(itm, "<Button-1>", lambda event: print("hi"))
-    # canv.lift(itm)
-    # canv.pack()
+        move.set_img(itm)
+        # bind a make move to the on click
+        canv.tag_bind(itm, "<Button-1>", lambda event, \
+                        move=move, board=board, canv=canv: \
+                            make_move(board, move, canv))
+
+def make_move(board, move, canv):
+    captured_piece, discarded, discarded_two = board.make_move(move)
+    canv.coords(move.piece.get_img(), move.new_pos[1] * 50, \
+                move.new_pos[0] * 50)
+    if(captured_piece != None):
+        canv.delete(captured_piece.get_img())
+    # draw_pieces(canv, board)
+    for move in board.shown_moves:
+        canv.delete(move.img)
+    board.selected_piece = None
+    board.update()
+    if(board.in_checkmate):
+        if(board.in_check):
+            print("Checkmate")
+        else:
+            print("Stalemate")
+
 if __name__ == '__main__':
     main()

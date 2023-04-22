@@ -3,6 +3,9 @@ class Move:
         self.piece = piece
         self.new_pos = new_pos
     
+    def set_img(self, img):
+        self.img = img
+
     def __repr__(self):
         return str(self)
 

@@ -23,6 +23,10 @@ class Board:
         """
         self.board = []
         self.selected_piece = None
+        self.shown_moves = None
+        self.turn = 0
+        self.in_check = False
+        self.in_checkmate = False
         fen = fen.split('/')
         for rank in fen:
             row = []
@@ -44,6 +48,7 @@ class Board:
         self.selected_piece = piece
         moves = piece.generate_moves(self.piece_board)
         moves = piece.prune_moves(self, moves)
+        self.shown_moves = moves
         return moves
 
     def is_in_check(self, color):
@@ -61,7 +66,30 @@ class Board:
         return False
         pass
 
-    def temp_move(self, move):
+    def is_in_checkmate(self, color):
+        """
+        Returns whether or not the given color is in checkmate.
+        """
+        # for each piece, check if it has any legal moves
+        for piece in self.pieces:
+            if piece.color == color:
+                moves = piece.generate_moves(self.piece_board)
+                moves = piece.prune_moves(self, moves)
+                if len(moves) > 0:
+                    return False
+        return True
+
+    def update(self):
+        """
+        Updates the board's state.
+        """
+        # update the turn and check/checkmate status
+        self.turn = (self.turn + 1) % 2
+        self.in_check = self.is_in_check(self.turn)
+        self.in_checkmate = self.is_in_checkmate(self.turn)
+        pass
+
+    def make_move(self, move):
         """
         Takes in a move and makes it without updating tkinter board.
         Returns whatever was on the new position or None if empty to be 

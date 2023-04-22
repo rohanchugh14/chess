@@ -47,7 +47,7 @@ class Piece:
         for i in range(len(moves)):
             move = moves[i]
             # make the move
-            captured_piece, old_row, old_col = board.temp_move(move)
+            captured_piece, old_row, old_col = board.make_move(move)
             # check if the king is in check
             if not board.is_in_check(self.color):
                 updated_moves.append(move)
@@ -150,12 +150,14 @@ class King(Piece):
                 if i == 0 and j == 0:
                     continue
                 # check if square is in bounds
-                if self.row + i < 0 or self.row + i >= 8 or self.col + j < 0 or self.col + j >= 8:
+                if self.row + i < 0 or self.row + i >= 8 or self.col + j < 0 \
+                      or self.col + j >= 8:
                     continue
                 # if the square is empty, add it as a legal move
                 if board[self.row + i][self.col + j] is None :
                     moves.append(Move(self, (self.row + i, self.col + j)))
-                # if the square is occupied by an enemy piece, add it as a legal move
+                # if the square is occupied by an enemy piece, add it as a 
+                # legal move
                 elif board[self.row + i][self.col + j].color != self.color:
                     moves.append(Move(self, (self.row + i, self.col + j)))
         return moves
@@ -202,7 +204,8 @@ class Rook(Piece):
                 # if square is our piece, stop searching in that direction
                 elif board[x][y].color == self.color:
                     break
-                # square is enemy piece, add to moves and stop searching in that direction
+                # square is enemy piece, add to moves and stop searching in 
+                # that direction
                 else:
                     moves.append(Move(self, (x,y)))
                     break
@@ -229,7 +232,8 @@ class Bishop(Piece):
                 # if square is our piece, stop searching in that direction
                 elif board[x][y].color == self.color:
                     break
-                # square is enemy piece, add to moves and stop searching in that direction
+                # square is enemy piece, add to moves and stop searching in 
+                # that direction
                 else:
                     moves.append(Move(self, (x,y)))
                     break
@@ -246,7 +250,8 @@ class Knight(Piece):
     def generate_moves(self, board):
         moves = []
         # loop through knight offsets
-        for x_offset, y_offset in [(1,2),(1,-2),(-1,2),(-1,-2),(2,1),(2,-1),(-2,1),(-2,-1)]:
+        for x_offset, y_offset in [(1,2),(1,-2),(-1,2),(-1,-2),(2,1),(2,-1),\
+                                   (-2,1),(-2,-1)]:
             x, y = self.row + x_offset, self.col + y_offset
             # if square is in bounds
             if 0 <= x < 8 and 0 <= y < 8:
@@ -281,10 +286,14 @@ class Pawn(Piece):
                     moves.append(Move(self,(self.row - 2, self.col)))
            
             # if pawn can capture to the top right
-            if self.col < 7 and self.row > 0 and board[self.row - 1][self.col + 1] is not None and board[self.row - 1][self.col + 1].color != self.color:
+            if self.col < 7 and self.row > 0 and \
+                board[self.row - 1][self.col + 1] is not None and \
+                    board[self.row - 1][self.col + 1].color != self.color:
                 moves.append(Move(self,(self.row - 1, self.col + 1)))
             # if pawn can capture to top left
-            if self.col > 0 and self.row > 0 and board[self.row - 1][self.col - 1] is not None and board[self.row - 1][self.col - 1].color != self.color:
+            if self.col > 0 and self.row > 0 and \
+                board[self.row - 1][self.col - 1] is not None and \
+                    board[self.row - 1][self.col - 1].color != self.color:
                 moves.append(Move(self,(self.row - 1, self.col - 1)))
         # if pawn is black
         else:
@@ -298,9 +307,13 @@ class Pawn(Piece):
                     moves.append(Move(self, (self.row + 2, self.col)))
            
             # if pawn can capture to the right
-            if self.col < 7 and self.row < 7 and board[self.row + 1][self.col + 1] is not None and board[self.row + 1][self.col + 1].color != self.color:
+            if self.col < 7 and self.row < 7 and \
+                board[self.row + 1][self.col + 1] is not None and \
+                    board[self.row + 1][self.col + 1].color != self.color:
                 moves.append(Move(self, (self.row + 1, self.col + 1)))
             # if pawn can capture to left
-            if self.col > 0 and self.row < 7 and board[self.row + 1][self.col - 1] is not None and board[self.row + 1][self.col - 1].color != self.color:
+            if self.col > 0 and self.row < 7 and \
+                board[self.row + 1][self.col - 1] is not None and \
+                    board[self.row + 1][self.col - 1].color != self.color:
                 moves.append(Move(self, (self.row + 1, self.col - 1)))
         return moves
