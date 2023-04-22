@@ -1,14 +1,95 @@
-from chess import Chess
 from tkinter import *
-from tkinter import ttk
 from piece import Piece
 from board import Board
-import os
 
+"""
+Name: Rohan Chugh
+UTEID: rkc797
+
+On my honor, Rohan Chugh, this programming assignment is my own work
+and I have not provided this code to any other student.
+Complete the following:
+1. What is the purpose of your program?
+
+The purpose of my program is to simulate a local game of Chess using a GUI.
+
+2. List the major features of your program:
+
+The major features of program are:
+    - A GUI that displays the current state of the board
+    - A reset button that resets the board to the starting position
+    - A label that displays the current turn and check/checkmate status
+    - A label that displays the instructions for the game
+    - Images that appear to represent the pieces
+    - Images that appear to represent the legal moves of a piece when it is
+    - selected
+    - A class for each piece that contains methods for generating legal moves
+    - A class for the board that contains methods for updating the board's
+    - state and making moves
+    - A class for moves that contains the piece that is moving and the new
+    - position of the piece
+
+3. What 3rd party modules must be installed for the program to work?
+(Must be clear and explicit here or we won't be able to test your program.)
+
+The only 3rd party module that must be installed for the program to work is
+Tkinter.
+
+4. List the things your learned while doing this program. Python features,
+techniques, third party modules, etc.
+
+I learned how to use Tkinter to create a GUI and how to use the Canvas widget
+to draw the board and pieces. I learned a lot about the PhotoImage class, like
+how to read in images from the file system with the path and how to use them
+in the Canvas. I also learned how to bind mouse events to Canvas objects like
+the photo images, and I learned how to do all of this programatically instead
+of hard-coding the UI like a lot of the Wordle assignment was. 
+
+
+
+5. What was the most difficult thing you had to overcome or learn
+to get this program to work?
+
+The most difficult thing I had to overcome was the initial phase of how to
+approach creating a board-game and GUI. It would be easy to do something like
+create the pieces as images and put them on a UI or to create the chess board
+as an image and put it on a UI, but it was much harder to try to figure out
+what the best way of creating pieces was, i.e. as objects or images or buttons,
+and what the best way to allow the movement of those pieces. I also had a big
+time sink in trying to figure out some obscure bugs with how Tkinter's Canvas
+photos work, as there is some stuff that is hidden in Python's abstraction in
+its garbage collector that I had to learn about to figure out why my images
+weren't showing up on the Canvas. It boiled down to the PhotoImage objects 
+getting garbage collected before being displayed on the Canvas because tkinter
+doesn't save them in memory, which only happens when making an image in a
+function since those variables are local to the function (making it a nightmare
+to debug since my go-to step was recreate it in a testing file, which worked
+perfectly since I didn't recreate it in a test file function). I also had a
+hard time figuring out how to make the pieces move, as I had to figure out
+how to make the pieces move to the correct position on the board and how to
+generate true legal moves, taking into things like not allowing you to put 
+yourself in check. Figuring out the best approach to this structure of Chess
+was very difficult, and I went through a lot of struggle with how to represent
+it using python's OOP features.
+
+6. What features would you add next?
+The next features I would add are some things that would allow for more
+advanced chess, such as castling, en passant, pawn promotion, and
+all the obscure checks for stalemate (with some being 
+relatively simple like making the same moveset 3 times in a row) and the
+ability to choose what piece  you want to promote your pawn to. There would also
+be a lot of very simple nice-to-have features like a timer for each player or
+more information on the UI like the number of pieces each player has taken and
+what the past moves were. I would also like to add a feature that allows you
+to save the full state of the game, as currently you can manually change the
+initial state the board is loaded in by adding a parameter to the Board() call,
+but it only recreates the piece positions and not the logic like whose turn it 
+is or check/checkmate status, which FEN strings have support for. 
+"""
 
 def main():
     root = Tk()
-    root.geometry("500x500")
+    root.geometry("500x550")
     root.title("Chess")
     canv = Canvas(root, width = 401, height = 401, highlightthickness=0)
     canv.pack()
@@ -23,7 +104,8 @@ def main():
                     justify=CENTER)
     lbl.config(wraplength=400)
     lbl.pack()
-    reset_btn = Button(root, text="Reset", command=lambda: reset(canv, txt, root))
+    reset_btn = Button(root, text="Reset", font=("Arial", 12), command=lambda: \
+                       reset(canv, txt, root))
     reset_btn.pack()
     board = Board()
     # img = PhotoImage(file="../img/white_pawn.png")
