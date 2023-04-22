@@ -13,13 +13,12 @@ def main():
     canv = Canvas(root, width = 401, height = 401, highlightthickness=0)
     canv.pack()
     draw_board(canv)
-    game = Chess()
+    board = Board("8/8/8/8/4k3/5b2/6B1/7K")
     # img = PhotoImage(file="../img/white_pawn.png")
     # itm = canv.create_image(100,100, image=img, anchor="nw")
     # canv.tag_bind(itm, "<Button-1>", lambda event: canv.move(itm, 50, 0))
-    draw_pieces(canv, game.board, game)
+    draw_pieces(canv, board)
     root.mainloop()
-    print(game)
 
 def draw_board(canv):
     for i in range(8):
@@ -31,7 +30,7 @@ def draw_board(canv):
             fill = "white" if (i+j) % 2 == 0 else "black"
             canv.create_rectangle(x1, y1, x2, y2, fill=fill)
 
-def draw_pieces(canv, board, game):
+def draw_pieces(canv, board):
     for i in range(8):
         for j in range(8):
             piece_str = board.get_piece_str(i, j)
@@ -43,7 +42,7 @@ def draw_pieces(canv, board, game):
                 piece = board.get_piece(i, j)
                 piece.set_img(itm)
                 canv.tag_bind(itm, "<Button-1>", lambda event, \
-                              piece=piece, canv=canv: select_piece(game, piece, canv))
+                              piece=piece, canv=canv: select_piece(board, piece, canv))
                 
                 # canv.tag_bind(itm, "<Button-1>", lambda event, \
                 #               piece=piece: temp_move_piece(canv, piece))
@@ -51,14 +50,17 @@ def draw_pieces(canv, board, game):
 def temp_move_piece(canv, piece):
     canv.move(piece.get_img(), 0, 50)
 
-def select_piece(game, piece, canv):
-    # prevent garbage collection from destroying the image
-    game.select_piece(piece)
-    itm = canv.create_image(piece.col * 50, piece.row * 50, \
-                            image=Piece.DOT_IMAGE, anchor="nw")
-    canv.tag_raise(itm)
+def select_piece(board, piece, canv):
+    moves = board.select_piece(piece)
+    for i in range(len(moves)):
+        move = moves[i]
+        itm = canv.create_image(move.new_pos[1] * 50, move.new_pos[0] * 50, \
+                                image=Piece.DOT_IMAGE, anchor="nw")
+    # itm = canv.create_image(piece.col * 50, piece.row * 50, \
+    #                         image=Piece.DOT_IMAGE, anchor="nw")
+    # canv.tag_raise(itm)
     canv.tag_bind(itm, "<Button-1>", lambda event: print("hi"))
-    canv.lift(itm)
-    canv.pack()
+    # canv.lift(itm)
+    # canv.pack()
 if __name__ == '__main__':
     main()

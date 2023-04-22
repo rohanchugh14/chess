@@ -1,4 +1,5 @@
 from board import Board
+from piece import Piece
 
 class Chess:
     """
@@ -18,20 +19,18 @@ class Chess:
     def __str__(self):
         return str(self.board)
 
+    
+
     def select_piece(self, piece):
         """
         Selects a piece on the board and returns a list of possible moves.
         """
         self.selected_piece = piece
-        
-    def parse_move(self, move):
-        # pawn move
-        # if move[0].lower() == move[0]:
-        #     # simple pawn move, only one possible choice:
-        #     new_row, new_col = self.__convert_pos(move)
-        #     old_row =  
+        moves = piece.generate_moves(self.board.piece_board)
+        moves = piece.prune_moves(self.board, moves)
+        return moves
 
-        pass
+   
 
     @staticmethod
     def __convert_pos(pos):

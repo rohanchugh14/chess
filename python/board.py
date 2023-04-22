@@ -16,12 +16,13 @@ class Board:
     form and sent to this class to update the Board. 
     """
 
-    def __init__(self, fen):
+    def __init__(self, fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'):
         """
         A constructor for a chess board that can take in a FEN string for a 
         starting position or use the default chess board to start. 
         """
         self.board = []
+        self.selected_piece = None
         fen = fen.split('/')
         for rank in fen:
             row = []
@@ -35,6 +36,56 @@ class Board:
                     row.append(char)
             self.board.append(row)
         self.pieces, self.piece_board = Piece.init_pieces(self.board)
+                
+    def select_piece(self, piece):
+        """
+        Selects a piece on the board and returns a list of possible moves.
+        """
+        self.selected_piece = piece
+        moves = piece.generate_moves(self.piece_board)
+        moves = piece.prune_moves(self, moves)
+        return moves
+
+    def is_in_check(self, color):
+        """
+        Returns whether or not the given color is in check.
+        """
+        king = Piece.WHITE_KING if color == 0 else Piece.BLACK_KING
+        # for each piece, check if it can move to the king's position
+        for piece in self.pieces:
+            if piece.color != color:
+                moves = piece.generate_moves(self.piece_board)
+                for move in moves:
+                    if move.new_pos == (king.row, king.col):
+                        return True
+        return False
+        pass
+
+    def temp_move(self, move):
+        """
+        Takes in a move and makes it without updating tkinter board.
+        Returns whatever was on the new position or None if empty to be 
+        used again to undo the move.
+        """
+        old_row, old_col = move.piece.row, move.piece.col
+        self.piece_board[old_row][old_col] = None
+        piece_captured = self.piece_board[move.new_pos[0]][move.new_pos[1]]
+        if piece_captured is not None:
+            self.pieces.remove(piece_captured)
+        self.piece_board[move.new_pos[0]][move.new_pos[1]] = move.piece
+        move.piece.row, move.piece.col = move.new_pos[0], move.new_pos[1]
+        return piece_captured, old_row, old_col
+
+    def undo_move(self, move, piece_captured, old_row, old_col):
+        """
+        Takes in a move and undoes it without updating tkinter board.
+        """
+        # old_row, old_col = move.piece.row, move.piece.col
+        self.piece_board[old_row][old_col] = move.piece
+        self.piece_board[move.new_pos[0]][move.new_pos[1]] = piece_captured
+        if piece_captured is not None:
+            self.pieces.append(piece_captured)
+        move.piece.row, move.piece.col = old_row, old_col
 
     def get_piece_str(self, row, col):
         """
